@@ -18,4 +18,4 @@ function generate({base,angle=137.5,reduction=60}) {
  const [h,s,l]=toHsl(base);
  return {base,accent:fromHsl(h+angle,s,l),support:fromHsl(h,s*(1-reduction/100),l)};
 }
-module.exports={normalize,toHsl,fromHsl,generate};
+export {normalize,toHsl,fromHsl,generate};

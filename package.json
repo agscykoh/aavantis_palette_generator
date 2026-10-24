@@ -8,10 +8,12 @@
     "dev": "concurrently -k \"vite --host 127.0.0.1\" \"wait-on http://127.0.0.1:5173 && electron . --dev\"",
     "build": "tsc --noEmit && vite build",
     "start": "electron .",
-    "test": "node --test tests/*.test.cjs",
+    "test": "node --test tests/*.test.mjs",
     "package": "npm run build && electron-builder --win portable",
     "package:win": "npm run build && electron-builder --win portable",
-    "package:mac": "npm run build && electron-builder --mac dmg zip --arm64 --x64"
+    "package:mac": "npm run build && electron-builder --mac dmg zip --arm64 --x64",
+    "dev:web": "vite --host 127.0.0.1",
+    "preview:web": "vite preview --host 127.0.0.1"
   },
   "dependencies": {
     "react": "^19.0.0",

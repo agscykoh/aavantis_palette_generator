@@ -6,6 +6,14 @@ It’s made with React, TypeScript, and Electron. All fonts and artwork are bund
 
 ## How do I download it?
 
+### Using the website
+
+The app also works directly in a browser when hosted on Vercel. Website visitors don’t need to install anything. Palette generation, locks, colour editing, and hex copying work in the browser; the desktop star window controls only appear in Electron.
+
+To deploy your own copy, push this project to GitHub, import that repository into Vercel, and deploy it. The included `vercel.json` selects Vite, `npm run build`, and the `dist` output folder. If you previously overrode settings in Vercel, use those values and remove any Electron start command. No environment variables or server are needed. See [Vercel’s Vite guide](https://vercel.com/docs/frameworks/frontend/vite).
+
+For a local browser preview, run `npm install`, then `npm run dev:web` and open the address it prints. Hex copying uses the browser clipboard and needs clipboard permission on HTTPS or localhost. The desktop setup below remains available.
+
 These instructions are for the project folder (the source code). You don’t need to know how to code, but you’ll need to copy a few commands during setup. You’ll need an internet connection for this part.
 
 1. Download the project ZIP from wherever this project is shared. If you’re on its GitHub repository, click **Code → Download ZIP**.

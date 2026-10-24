@@ -1,12 +1,21 @@
 const {app,BrowserWindow}=require('electron');
 const fs=require('node:fs');
-require('../electron/main.cjs');
+const browserMode=process.argv.includes('--browser');
+if(browserMode){
+ app.whenReady().then(()=>{
+  const win=new BrowserWindow({width:1200,height:900,webPreferences:{contextIsolation:true,nodeIntegration:false,sandbox:true}});
+  win.loadFile(require('node:path').join(__dirname,'../dist/index.html'));
+ });
+}else require('../electron/main.cjs');
 const timeout=setTimeout(()=>{console.error('Smoke test timed out');app.exit(1);},30000);
-app.whenReady().then(()=>{
- const win=BrowserWindow.getAllWindows()[0];
+app.once('browser-window-created',(_event,win)=>{
  win.webContents.once('did-finish-load',async()=>{
   try{
    await win.webContents.executeJavaScript('document.fonts.ready');
+   if(browserMode){
+    const isolated=await win.webContents.executeJavaScript(`!window.paletteApp && !document.querySelector('header nav')`);
+    if(!isolated)throw Error('Browser mode exposes desktop controls');
+   }
    await new Promise(r=>setTimeout(r,500));
    fs.mkdirSync('previews',{recursive:true});
    fs.writeFileSync('previews/landing.png',(await win.webContents.capturePage()).toPNG());
@@ -29,7 +38,7 @@ app.whenReady().then(()=>{
     return outputs;
    })()`);
    fs.writeFileSync('previews/results.png',(await win.webContents.capturePage()).toPNG());
-   console.log('Electron smoke test passed:',result);clearTimeout(timeout);app.exit(0);
+   console.log(browserMode?'Browser smoke test passed:':'Electron smoke test passed:',result);clearTimeout(timeout);app.exit(0);
   }catch(error){console.error(error);clearTimeout(timeout);app.exit(1);}
  });
 });
